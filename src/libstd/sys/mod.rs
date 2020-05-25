@@ -29,9 +29,12 @@ cfg_if::cfg_if! {
     } else if #[cfg(unix)] {
         mod unix;
         pub use self::unix::*;
-    } else if #[cfg(windows)] {
+    } else if #[cfg(all(windows, not(target_arch = "x86")))] {
         mod windows;
         pub use self::windows::*;
+    } else if #[cfg(all(windows, target_arch = "x86"))] {
+        mod windows_legacy;
+        pub use self::windows_legacy::*;
     } else if #[cfg(target_os = "cloudabi")] {
         mod cloudabi;
         pub use self::cloudabi::*;

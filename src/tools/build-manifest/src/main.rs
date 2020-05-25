@@ -83,6 +83,7 @@ static TARGETS: &[&str] = &[
     "asmjs-unknown-emscripten",
     "i386-apple-ios",
     "i586-pc-windows-msvc",
+    "i586-pc-windows-msvclegacy",
     "i586-unknown-linux-gnu",
     "i586-unknown-linux-musl",
     "i686-apple-darwin",
