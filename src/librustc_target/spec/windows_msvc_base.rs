@@ -24,6 +24,8 @@ pub fn opts() -> TargetOptions {
         // linking some libraries which require a specific agreement, so it may
         // not ever be possible for us to pass this flag.
         no_default_libraries: false,
+        target_api_kind: Some("windows".to_string()),
+        target_api_default_features: vec!["6.1.7600".to_string()],
 
         ..base
     }

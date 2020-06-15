@@ -23,6 +23,7 @@ extern crate rustc_macros;
 extern crate tracing;
 
 pub mod abi;
+pub mod api;
 pub mod asm;
 pub mod spec;
 

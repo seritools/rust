@@ -89,6 +89,8 @@ pub fn opts() -> TargetOptions {
         emit_debug_gdb_scripts: false,
         requires_uwtable: true,
         eh_frame_header: false,
+        target_api_kind: Some("windows".to_string()),
+        target_api_default_features: vec!["6.1.7600".to_string()],
 
         ..Default::default()
     }

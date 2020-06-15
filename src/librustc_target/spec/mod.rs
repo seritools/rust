@@ -993,6 +993,12 @@ pub struct TargetOptions {
     /// used to locate unwinding information is passed
     /// (only has effect if the linker is `ld`-like).
     pub eh_frame_header: bool,
+
+    /// Decides which logic will be used for determining the full set of target API features
+    pub target_api_kind: Option<String>,
+
+    /// The default API features for this target.
+    pub target_api_default_features: Vec<String>,
 }
 
 impl Default for TargetOptions {
@@ -1085,6 +1091,8 @@ impl Default for TargetOptions {
             llvm_args: vec![],
             use_ctors_section: false,
             eh_frame_header: true,
+            target_api_kind: None,
+            target_api_default_features: vec![],
         }
     }
 }
@@ -1478,6 +1486,8 @@ impl Target {
         key!(llvm_args, list);
         key!(use_ctors_section, bool);
         key!(eh_frame_header, bool);
+        key!(target_api_kind, optional);
+        key!(target_api_default_features, list);
 
         // NB: The old name is deprecated, but support for it is retained for
         // compatibility.
@@ -1716,6 +1726,8 @@ impl ToJson for Target {
         target_option_val!(llvm_args);
         target_option_val!(use_ctors_section);
         target_option_val!(eh_frame_header);
+        target_option_val!(target_api_kind);
+        target_option_val!(target_api_default_features);
 
         if default.unsupported_abis != self.options.unsupported_abis {
             d.insert(
@@ -1790,4 +1802,11 @@ impl fmt::Display for TargetTriple {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.debug_triple())
     }
+}
+
+/// A target api function and an optional default, if any
+#[derive(PartialEq, Clone, Debug)]
+pub struct TargetApiDefinition {
+    pub api_kind: String,
+    pub target_api_default_features: Vec<String>,
 }

@@ -53,6 +53,22 @@ pub fn add_configuration(
     if sess.crt_static(None) {
         cfg.insert((tf, Some(sym::crt_dash_static)));
     }
+
+    let target_options = &sess.target.target.options;
+    if let Some(target_api_kind) = &target_options.target_api_kind {
+        let target_api_defaults = &target_options.target_api_default_features;
+        let selected_target_apis =
+            sess.opts.cg.target_api_features.as_ref().unwrap_or(target_api_defaults);
+
+        let apis = rustc_target::api::get_enabled_target_api_features(
+            target_api_kind,
+            selected_target_apis,
+        );
+
+        let ta = sym::target_api_feature;
+        cfg.extend(apis.into_iter().map(|api| (ta, Some(Symbol::intern(api)))));
+        cfg.extend(selected_target_apis.into_iter().map(|api| (ta, Some(Symbol::intern(api)))));
+    }
 }
 
 pub fn create_session(
