@@ -1,5 +1,6 @@
-const WINDOWS_VERSIONS: [&str; 25] = [
+const WINDOWS_VERSIONS: [&str; 26] = [
     "3.10.511",   // NT 3.1
+    "3.10.528",   // NT 3.1 SP3
     "3.50.807",   // NT 3.5
     "3.51.1057",  // NT 3.51
     "4.0.1381",   // NT 4
