@@ -480,10 +480,13 @@ point instructions in software. It takes one of the following values:
 * `y`, `yes`, `on`, or no value: use soft floats.
 * `n`, `no`, or `off`: use hardware floats (the default).
 
-## target-api-features
+## target-api-feature
 
 This option tells `rustc` which operating system APIs are expected to be supported for the target.
 Implied features are added as well.
+
+API features are added as a comma-separated list (`-C target_api_feature=a,b`). The option can be
+specified more than once to add more features the the list.
 
 #### Windows
 
