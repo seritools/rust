@@ -603,6 +603,29 @@ pub fn rustc_cargo_env(builder: &Builder<'_>, cargo: &mut Cargo, target: TargetS
             cargo.env("LLVM_NDEBUG", "1");
         }
     }
+
+    if target.contains("windows") {
+        // all `target_api_feature`s for the currently officially supported
+        // windows version for rust
+        const WINDOWS_VERSIONS: [&str; 12] = [
+            "3.10.511",  // NT 3.1
+            "3.10.528",  // NT 3.1 SP3
+            "3.50.807",  // NT 3.5
+            "3.51.1057", // NT 3.51
+            "4.0.1381",  // NT 4
+            "5.0.2195",  // 2000
+            "5.1.2600",  // XP
+            "5.2.3790",  // XP 64bit, Server 2003
+            "6.0.6000",  // Vista, Server 2008
+            "6.0.6001",  // Vista SP1, Server 2008 SP1
+            "6.0.6002",  // Vista SP2, Server 2008 SP2
+            "6.1.7600",  // 7, Server 2008 R2
+        ];
+
+        for v in &WINDOWS_VERSIONS {
+            cargo.rustflag(&format!("--cfg=target_api_feature=\"{}\"", v));
+        }
+    }
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
