@@ -1061,6 +1061,7 @@ symbols! {
         sym,
         sync,
         sync_trait,
+        target_api_feature,
         target_arch,
         target_endian,
         target_env,

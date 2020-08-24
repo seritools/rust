@@ -30,6 +30,7 @@ pub fn opts() -> TargetOptions {
         late_link_args,
         late_link_args_dynamic,
         late_link_args_static,
+        target_api_default_features: vec!["10.0.10240".to_string()],
 
         ..base
     }

@@ -921,6 +921,11 @@ impl Build {
         self.config.target_config.get(&target).and_then(|t| t.qemu_rootfs.as_ref()).map(|p| &**p)
     }
 
+    /// Returns the target api feature list if they are present
+    fn target_api_feature(&self, target: TargetSelection) -> Option<&Vec<String>> {
+        self.config.target_config.get(&target).and_then(|t| t.target_api_feature.as_ref())
+    }
+
     /// Path to the python interpreter to use
     fn python(&self) -> &Path {
         self.config.python.as_ref().unwrap()

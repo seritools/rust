@@ -546,6 +546,11 @@
 # probably don't want to use this.
 #qemu-rootfs = "..."
 
+# Comma separated list of target api features for the target. Currently, *all*
+# features have to be passed if this is specified. Inherited features are not
+# supported here yet.
+#target-api-feature = "...,..."
+
 # =============================================================================
 # Distribution options
 #

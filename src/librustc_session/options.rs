@@ -273,6 +273,7 @@ macro_rules! options {
         pub const parse_tls_model: &str =
             "one of supported TLS models (`rustc --print tls-models`)";
         pub const parse_target_feature: &str = parse_string;
+        pub const parse_target_api_feature: &str = parse_opt_comma_list;
     }
 
     #[allow(dead_code)]
@@ -673,6 +674,17 @@ macro_rules! options {
                 None => false,
             }
         }
+
+        fn parse_target_api_feature(slot: &mut Option<Vec<String>>, v: Option<&str>) -> bool {
+            match (slot, v) {
+                (Some(vec), Some(s)) => { vec.extend(s.split(',').map(|s| s.to_string())); true },
+                (slot @ None, Some(s)) => {
+                    *slot = Some(s.split(',').map(|s| s.to_string()).collect());
+                    true
+                },
+                _ => false,
+            }
+        }
     }
 ) }
 
@@ -768,6 +780,9 @@ options! {CodegenOptions, CodegenSetter, basic_codegen_options,
         "save all temporary output files during compilation (default: no)"),
     soft_float: bool = (false, parse_bool, [TRACKED],
         "use soft float ABI (*eabihf targets only) (default: no)"),
+    target_api_feature: Option<Vec<String>> = (None, parse_target_api_feature, [TRACKED],
+        "a comma-separated list of target APIs that are expected to be be available on the target
+        (default: use target default) (can be used multiple times)"),
     target_cpu: Option<String> = (None, parse_opt_string, [TRACKED],
         "select target processor (`rustc --print target-cpus` for details)"),
     target_feature: String = (String::new(), parse_target_feature, [TRACKED],

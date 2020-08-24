@@ -444,6 +444,7 @@ fn test_codegen_options_tracking_hash() {
     tracked!(profile_use, Some(PathBuf::from("abc")));
     tracked!(relocation_model, Some(RelocModel::Pic));
     tracked!(soft_float, true);
+    tracked!(target_api_features, Some(vec![String::from("1"), String::from("2")]));
     tracked!(target_cpu, Some(String::from("abc")));
     tracked!(target_feature, String::from("all the features, all of them"));
 }

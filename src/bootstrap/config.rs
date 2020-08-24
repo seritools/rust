@@ -240,6 +240,7 @@ pub struct Target {
     pub wasi_root: Option<PathBuf>,
     pub qemu_rootfs: Option<PathBuf>,
     pub no_std: bool,
+    pub target_api_feature: Option<Vec<String>>,
 }
 
 impl Target {
@@ -432,6 +433,7 @@ struct TomlTarget {
     wasi_root: Option<String>,
     qemu_rootfs: Option<String>,
     no_std: Option<bool>,
+    target_api_feature: Option<String>,
 }
 
 impl Config {
@@ -703,6 +705,10 @@ impl Config {
                 target.musl_libdir = cfg.musl_libdir.clone().map(PathBuf::from);
                 target.wasi_root = cfg.wasi_root.clone().map(PathBuf::from);
                 target.qemu_rootfs = cfg.qemu_rootfs.clone().map(PathBuf::from);
+                target.target_api_feature = cfg
+                    .target_api_feature
+                    .as_ref()
+                    .map(|s| s.split(',').map(String::from).collect());
 
                 config.target_config.insert(TargetSelection::from_user(triple), target);
             }

@@ -10,5 +10,7 @@ pub fn opts() -> TargetOptions {
         .unwrap()
         .extend(pre_link_args_msvc);
 
+    opts.target_api_default_features = vec!["10.0.10240".to_string()];
+
     opts
 }

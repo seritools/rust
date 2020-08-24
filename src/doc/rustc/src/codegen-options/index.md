@@ -480,6 +480,36 @@ point instructions in software. It takes one of the following values:
 * `y`, `yes`, `on`, or no value: use soft floats.
 * `n`, `no`, or `off`: use hardware floats (the default).
 
+## target-api-feature
+
+This option tells `rustc` which operating system APIs are expected to be supported for the target.
+Implied features are added as well.
+
+API features are added as a comma-separated list (`-C target_api_feature=a,b`). The option can be
+specified more than once to add more features the the list.
+
+#### Windows
+
+Currently, this option is only used for Windows targets, where the feature
+names are the `<major>.<minor>.<build>` versions of all major releases (e.g. `10.0.10240`).
+Any version selected adds all previous versions as well, allowing for "greater than"
+comparisons:
+
+```rs
+if cfg!(target_api_feature = "10.0.10240") {
+    println!("new win10 api here");
+} else if cfg!(target_api_feature = "6.1.7600") {
+    println!("regular win7 api here");
+} else if cfg!(target_api_feature = "5.1.2600") {
+    println!("legacy winxp api here");
+} else {
+    println!("not supported");
+}
+```
+
+Currently, the default for regular Windows targets is Windows 7 (`6.1.7600`).
+For UWP targets, it is Windows 10, Version 1509 (`10.0.10240`).
+
 ## target-cpu
 
 This instructs `rustc` to generate code specifically for a particular processor.

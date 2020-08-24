@@ -205,6 +205,43 @@ fn copy_self_contained_objects(
     target_deps
 }
 
+fn add_target_api_features_cargo(
+    builder: &Builder<'_>,
+    target: TargetSelection,
+    cargo: &mut Cargo,
+) {
+    if let Some(api_features) = builder.target_api_feature(target) {
+        for api_feature in api_features {
+            cargo.rustflag("--cfg");
+            cargo.rustflag(&format!("target_api_feature=\"{}\"", api_feature));
+        }
+    } else {
+        if target.contains("windows") {
+            // all `target_api_feature`s for the currently officially supported
+            // windows version for rust
+            const WINDOWS_VERSIONS: [&str; 12] = [
+                "3.10.511",  // NT 3.1
+                "3.10.528",  // NT 3.1 SP3
+                "3.50.807",  // NT 3.5
+                "3.51.1057", // NT 3.51
+                "4.0.1381",  // NT 4
+                "5.0.2195",  // 2000
+                "5.1.2600",  // XP
+                "5.2.3790",  // XP 64bit, Server 2003
+                "6.0.6000",  // Vista, Server 2008
+                "6.0.6001",  // Vista SP1, Server 2008 SP1
+                "6.0.6002",  // Vista SP2, Server 2008 SP2
+                "6.1.7600",  // 7, Server 2008 R2
+            ];
+
+            for v in &WINDOWS_VERSIONS {
+                cargo.rustflag("--cfg");
+                cargo.rustflag(&format!("target_api_feature=\"{}\"", v));
+            }
+        }
+    }
+}
+
 /// Configure cargo to compile the standard library, adding appropriate env vars
 /// and such.
 pub fn std_cargo(builder: &Builder<'_>, target: TargetSelection, stage: u32, cargo: &mut Cargo) {
@@ -296,6 +333,8 @@ pub fn std_cargo(builder: &Builder<'_>, target: TargetSelection, stage: u32, car
     if target.contains("riscv") {
         cargo.rustflag("-Cforce-unwind-tables=yes");
     }
+
+    add_target_api_features_cargo(builder, target, cargo);
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -603,6 +642,8 @@ pub fn rustc_cargo_env(builder: &Builder<'_>, cargo: &mut Cargo, target: TargetS
             cargo.env("LLVM_NDEBUG", "1");
         }
     }
+
+    add_target_api_features_cargo(builder, target, cargo);
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
